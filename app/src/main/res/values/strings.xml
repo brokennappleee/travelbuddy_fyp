@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">TravelBuddy</string>
+
+    <!-- Launch Page -->
+    <string name="launch_subtext">Discover a world of opportunities with us, stress-free</string>
+    <string name="launch_btn">Join us</string>
+
+
+    <!-- Signup Pages -->
+    <string name="signup_title">Join us today, welcome!</string>
+    <string name="signup_subtext">Let us know your name and create a password for your new account</string>
+    <string name="signup_input_name">Enter Name</string>
+    <string name="signup_input_createpwd">Create Password</string>
+    <string name="signup_input_confirmpwd">Confirm Password</string>
+    <string name="signup_input_createacc">Create Account</string>
+</resources>

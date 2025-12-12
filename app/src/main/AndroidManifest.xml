@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelBuddy">
         <activity
+            android:name=".ForgotPwd1"
+            android:exported="false" />
+        <activity
             android:name=".Login1"
             android:exported="false" />
         <activity

@@ -5,6 +5,8 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <!--Common Elements-->
+    Back Button
     <style name="BackButton">
         <item name="android:src">@drawable/back_btn</item>
         <item name="android:scaleType">fitCenter</item>
@@ -12,7 +14,7 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-
+    <!--Input Field Box-->
     <style name="InputField">
         <item name="android:background">@drawable/custom_input</item>
         <!-- inner spacing so text doesn’t stick to the border -->
@@ -22,6 +24,7 @@
         <item name="android:paddingBottom">12dp</item>
     </style>
 
+    <!--Input Field Label -->
     <style name="InputLabel">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/lightgrey</item>
@@ -30,6 +33,15 @@
         <item name="android:paddingBottom">6dp</item>
         <item name="android:paddingLeft">4dp</item>
     </style>
+
+    <!--Illustration-->
+    <style name="LargeIllustration">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">200dp</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
 
     <!-- Launch Page -->
     <style name="TitleText">

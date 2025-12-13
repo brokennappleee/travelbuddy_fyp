@@ -22,7 +22,16 @@ public class Login1 extends AppCompatActivity {
         setContentView(R.layout.activity_login1);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+
+            float scale = getResources().getDisplayMetrics().density;
+            int basePx = (int) (16 * scale);   // 16dp
+
+            v.setPadding(
+                    systemBars.left + basePx,
+                    systemBars.top + basePx,
+                    systemBars.right + basePx,
+                    systemBars.bottom + basePx
+            );
             return insets;
         });
 

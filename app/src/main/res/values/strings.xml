@@ -24,4 +24,14 @@
     <string name="login_signup1">Don\'t have an account? </string>
     <string name="login_signup2">Sign up</string>
     <string name="login_forgot_text">Forgot your password?</string>
+
+
+    <!--Personal Questions-->
+    <string name="btn_text">Next</string>
+    <string name="skip_text">Skip All</string>
+    <string name="start_title">Let\'s personalize your journey!</string>
+    <string name="start_subtext">To improve your TravelBuddy experience, we\'ll guide you through a few simple questions.</string>
+
+    <string name="q1_title">Which type of places do you prefer? </string>
+    <string name="q1_subtext">Tell us what you’re most drawn to on a trip. You can select more than one option!</string>
 </resources>

@@ -12,6 +12,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelBuddy">
         <activity
+            android:name=".questions.FailedToCreate"
+            android:exported="false" />
+        <activity
+            android:name=".questions.CreatedAccount"
+            android:exported="false" />
+        <activity
+            android:name=".questions.PersonalQuestion5"
+            android:exported="false" />
+        <activity
+            android:name=".questions.PersonalQuestion4"
+            android:exported="false" />
+        <activity
+            android:name=".questions.PersonalQuestion3"
+            android:exported="false" />
+        <activity
+            android:name=".questions.PersonalQuestion2"
+            android:exported="false" />
+        <activity
+            android:name=".questions.PersonalQuestion1"
+            android:exported="false" />
+        <activity
+            android:name=".questions.PersonalQuestion0"
+            android:exported="true" />
+        <activity
             android:name=".ForgotPwd1"
             android:exported="false" />
         <activity

@@ -23,10 +23,12 @@
         style="@style/TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="100dp"
+        android:text="@string/login_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/login_title" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/textView2"
@@ -131,7 +133,7 @@
             android:id="@+id/textLogin1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_signup1"
+            android:text="Don't have an account? "
             android:textSize="16sp"
             android:textColor="@android:color/black" />
 

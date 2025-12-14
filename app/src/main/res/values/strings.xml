@@ -34,4 +34,8 @@
 
     <string name="q1_title">Which type of places do you prefer? </string>
     <string name="q1_subtext">Tell us what you’re most drawn to on a trip. You can select more than one option!</string>
+    <string name="q1_option_1">Natural Sceneries</string>
+    <string name="q1_option_2">Vibrant, Bustling Cities</string>
+    <string name="q1_option_3">Shopping Districts</string>
+    <string name="q1_option_4">Historical Landmarks</string>
 </resources>

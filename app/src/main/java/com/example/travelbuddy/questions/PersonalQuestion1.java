@@ -3,6 +3,8 @@ package com.example.travelbuddy.questions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -12,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.travelbuddy.Homepage;
 import com.example.travelbuddy.R;
 
 public class PersonalQuestion1 extends AppCompatActivity {
@@ -42,6 +45,56 @@ public class PersonalQuestion1 extends AppCompatActivity {
         // For question 1 of 5:
         progressBar.setMax(5);
         progressBar.setProgress(1);
+
+        //Back button
+        ImageButton back_btn = findViewById(R.id.back_btn);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalQuestion1.this, PersonalQuestion0.class);
+                startActivity(intent);
+            }
+        });
+
+
+        //Skip all button
+        TextView skip_btn = findViewById(R.id.skipall_textview);
+        skip_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalQuestion1.this, Homepage.class);
+                startActivity(intent);
+            }
+        });
+
+
+        //Next page button
+        Button next_btn = findViewById(R.id.next_btn);
+        next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalQuestion1.this, PersonalQuestion2.class);
+            }
+        });
+
+
+        // ===== Image buttons: multi-select toggle =====
+        ImageButton btnNature = findViewById(R.id.btn_nature);
+        ImageButton btnCity = findViewById(R.id.btn_city);
+        ImageButton btnShopping = findViewById(R.id.btn_shopping);
+        ImageButton btnLandmarks = findViewById(R.id.btn_landmarks);
+
+        View.OnClickListener toggleListener = v -> {
+            v.setSelected(!v.isSelected());
+            // simple visual feedback: dim when selected
+            v.setAlpha(v.isSelected() ? 0.5f : 1f);
+        };
+
+        btnNature.setOnClickListener(toggleListener);
+        btnCity.setOnClickListener(toggleListener);
+        btnShopping.setOnClickListener(toggleListener);
+        btnLandmarks.setOnClickListener(toggleListener);
+
 
 
     }

@@ -46,4 +46,17 @@
     Choose how quickly you\'d like your trip to unfold. Do you enjoy something packed or something slower?
     </string>
 
+
+    <!--Question 3-->
+    <string name="q3_title">How open are you to trying new things on a trip?</string>
+    <string name="q3_subtext">Do you prefer the familiar, some new things, or anything exciting?</string>
+
+    <!--Question 4-->
+    <string name="q4_title">How much time do you usually dedicate to a single place?</string>
+    <string name="q4_subtext">Decide how long you like to stay. Do you prefer quick visits or taking your time to explore?</string>
+
+
+    <!--Question 5-->
+    <string name="q5_title">Are you planning for a specific trip or just exploring?</string>
+    <string name="q5_subtext">Let us know if you’re planning something specific or simply looking for inspiration?</string>
 </resources>

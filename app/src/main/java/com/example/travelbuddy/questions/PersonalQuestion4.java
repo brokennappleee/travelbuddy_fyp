@@ -1,6 +1,7 @@
 package com.example.travelbuddy.questions;
 
 import android.os.Bundle;
+import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,13 @@ public class PersonalQuestion4 extends AppCompatActivity {
             );
             return insets;
         });
+
+        // Set Progress Bar
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+
+        // For question 4 of 5:
+        progressBar.setMax(5);
+        progressBar.setProgress(4);
 
     }
 }

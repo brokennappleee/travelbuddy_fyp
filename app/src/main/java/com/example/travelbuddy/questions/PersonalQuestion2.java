@@ -37,7 +37,7 @@ public class PersonalQuestion2 extends AppCompatActivity {
         // Set Progress Bar
         ProgressBar progressBar = findViewById(R.id.progressBar);
 
-        // For question 1 of 5:
+        // For question 3 of 5:
         progressBar.setMax(5);
         progressBar.setProgress(2);
     }

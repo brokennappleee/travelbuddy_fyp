@@ -57,13 +57,13 @@
     <Button
         android:id="@+id/next_btn"
         style="@style/PrimaryButton"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/btn_text"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp" />
+        app:layout_constraintEnd_toEndOf="@id/textView" />
 
     <TextView
         android:id="@+id/skipall_textview"

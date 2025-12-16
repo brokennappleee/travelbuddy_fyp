@@ -66,5 +66,15 @@
 
     </style>
 
+
+    <!-- Personal Questions 0-5-->
+    <style name="PaceSlider" parent="@style/Widget.Material3.Slider">
+        <item name="trackHeight">10dp</item>
+        <item name="thumbRadius">6dp</item>
+        <item name="tickVisible">true</item>
+        <item name="tickColorInactive">@color/lightgrey</item>
+        <item name="tickColorActive">@color/lightgrey</item>
+    </style>
+
     <style name="Theme.TravelBuddy" parent="Base.Theme.TravelBuddy" />
 </resources>

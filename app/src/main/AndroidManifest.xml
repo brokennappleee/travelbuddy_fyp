@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelBuddy">
         <activity
-            android:name=".Testing"
-            android:exported="false" />
+            android:name=".HomepageActivity"
+            android:exported="true" />
         <activity
-            android:name=".Homepage"
+            android:name=".Testing"
             android:exported="false" />
         <activity
             android:name=".questions.FailedToCreate"

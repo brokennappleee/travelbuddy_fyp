@@ -14,7 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.travelbuddy.Homepage;
+import com.example.travelbuddy.HomepageActivity;
 import com.example.travelbuddy.R;
 
 public class PersonalQuestion1 extends AppCompatActivity {
@@ -62,7 +62,7 @@ public class PersonalQuestion1 extends AppCompatActivity {
         skip_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PersonalQuestion1.this, Homepage.class);
+                Intent intent = new Intent(PersonalQuestion1.this, HomepageActivity.class);
                 startActivity(intent);
             }
         });

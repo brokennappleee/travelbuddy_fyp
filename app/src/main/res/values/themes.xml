@@ -6,12 +6,19 @@
     </style>
 
     <!--Common Elements-->
-    Back Button
+    <!--Back Button-->
     <style name="BackButton">
         <item name="android:src">@drawable/back_btn</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+
+    <!--Navigation Bar Text-->
+    <style name="BottomNavText" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingTop">4dp</item>  <!-- increase gap -->
     </style>
 
     <!--Input Field Box-->

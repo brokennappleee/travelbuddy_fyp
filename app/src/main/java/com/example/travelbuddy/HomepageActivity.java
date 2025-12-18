@@ -7,6 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 public class HomepageActivity extends AppCompatActivity {
 
@@ -29,6 +33,40 @@ public class HomepageActivity extends AppCompatActivity {
             );
             return insets;
         });
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+
+// Default fragment when opening homepage (optional)
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.home_fragment_container, new MapsFragment())
+                .commit();
+
+        bottomNav.setOnItemSelectedListener(item -> {
+            Fragment selected = null;
+            int id = item.getItemId();
+
+            if (id == R.id.nav_itinerary) {
+                selected = new ItineraryFragment();
+            } else if (id == R.id.nav_maps) {
+                selected = new MapsFragment();   // this is enough
+            } else if (id == R.id.nav_profile) {
+                selected = new ProfileFragment();
+            } else if (id == R.id.nav_create) {
+                selected = new CreateFragment();
+            }
+
+            if (selected != null) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.home_fragment_container, selected)
+                        .commit();
+                return true;
+            }
+            return false;
+        });
+
+
 
     }
 }

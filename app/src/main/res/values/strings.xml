@@ -59,4 +59,11 @@
     <!--Question 5-->
     <string name="q5_title">Are you planning for a specific trip or just exploring?</string>
     <string name="q5_subtext">Let us know if you’re planning something specific or simply looking for inspiration?</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--Create Fragment -->
+    <string name="create_frg_title">Plan a new trip</string>
+    <string name="create_frg_subtext">Create a journey to visualize and manage your upcoming adventure</string>
+
 </resources>

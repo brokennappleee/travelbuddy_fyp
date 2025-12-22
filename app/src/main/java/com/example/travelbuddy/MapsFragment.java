@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
+
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
+
+import java.util.Arrays;
+import java.util.List;
+
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
@@ -117,6 +126,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         btnFriends.setSelected(true);
         btnItinerary.setSelected(false);
 
+        RecyclerView rv = view.findViewById(R.id.rv_items);
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv.addItemDecoration(new DividerItemDecoration(
+                requireContext(), DividerItemDecoration.VERTICAL));
+
+    // temporary hard‑coded data
+        List<Friend> friends = Arrays.asList(
+                new Friend("Karen Li", "Tuen Mun ZVE", "10:30 pm"),
+                new Friend("Lam", "Ocean Park", "11:00 pm"),
+                new Friend("Miffy Chan", "Space Museum", "11:00 pm"),
+                new Friend("Hello Kitty", "Linda Hotel", "11:00 pm")
+        );
+
+        FriendsAdapter friendsAdapter = new FriendsAdapter(friends);
+        rv.setAdapter(friendsAdapter);
+
+
     }
 
     @Override
@@ -140,4 +166,46 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private void showEdgeOnly() {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);     // only edge
     }
+
+    //Displaying Friends
+    static class Friend {
+        String name, location, since;
+        Friend(String n, String l, String s) { name=n; location=l; since=s; }
+    }
+
+    static class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.VH> {
+        private final List<Friend> data;
+        FriendsAdapter(List<Friend> data) { this.data = data; }
+
+        static class VH extends RecyclerView.ViewHolder {
+            TextView tvInitial, tvName, tvLocation, tvSince;
+            VH(View itemView) {
+                super(itemView);
+                tvInitial = itemView.findViewById(R.id.tv_initial);
+                tvName = itemView.findViewById(R.id.tv_name);
+                tvLocation = itemView.findViewById(R.id.tv_location);
+                tvSince = itemView.findViewById(R.id.tv_since);
+            }
+        }
+
+        @NonNull @Override
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_friend, parent, false);
+            return new VH(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull VH h, int position) {
+            Friend f = data.get(position);
+            h.tvInitial.setText(f.name.substring(0, 1));
+            h.tvName.setText(f.name);
+            h.tvLocation.setText("At " + f.location);
+            h.tvSince.setText("Since " + f.since);
+        }
+
+        @Override
+        public int getItemCount() { return data.size(); }
+    }
+
 }

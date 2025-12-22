@@ -19,21 +19,6 @@ public class HomepageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_homepage);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-
-            float scale = getResources().getDisplayMetrics().density;
-            int basePx = (int) (16 * scale);   // 16dp
-
-            v.setPadding(
-                    systemBars.left + basePx,
-                    systemBars.top + basePx,
-                    systemBars.right + basePx,
-                    0 // no bottom padding, let nav bar sit at bottom
-            );
-            return insets;
-        });
-
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
 
 // Default fragment when opening homepage (optional)

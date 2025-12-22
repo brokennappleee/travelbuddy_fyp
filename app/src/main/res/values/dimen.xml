@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- height of the visible edge when collapsed -->
+    <dimen name="bottom_sheet_peek">28dp</dimen>
+
+</resources>

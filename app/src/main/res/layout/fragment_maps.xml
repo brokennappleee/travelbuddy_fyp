@@ -11,23 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- Bottom sheet panel -->
+    <!-- Bottom sheet panel (friends / itinerary tab) -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/info_sheet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:cardCornerRadius="24dp"
-        app:cardElevation="8dp"
+        app:cardElevation="12dp"
+        app:cardMaxElevation="12dp"
+        app:cardBackgroundColor="@color/white"
+        app:strokeWidth="0dp"
         app:layout_behavior="@string/bottom_sheet_behavior"
-        app:behavior_peekHeight="120dp">
+        app:behavior_peekHeight="40dp">
 
+        <!-- whole sliding content -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- drag handle + collapse button -->
+            <!-- drag handle -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,26 +39,55 @@
 
                 <View
                     android:layout_width="40dp"
-                    android:layout_height="4dp"/>
+                    android:layout_height="4dp"
+                    android:background="@color/lightgrey" />
             </LinearLayout>
 
-            <!-- Summary row: trip name, members -->
-            <TextView
-                android:id="@+id/tv_trip_title"
+            <!--Tab Row-->
+            <LinearLayout
+                android:id="@+id/tabs_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tokyo with Friends"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:gravity="start"
+                android:paddingTop="12dp"
+                android:paddingBottom="8dp">
 
-            <TextView
-                android:id="@+id/tv_trip_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3 members on this trip" />
 
-            <!-- List / chips for members, etc. -->
-            <!-- For now, put simple dummy rows -->
+                <Button
+                    android:id="@+id/btn_friends"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Friends"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:textAllCaps="false"
+                    android:background="@drawable/tab_pill_selector"
+                    android:textColor="@color/tab_text_selector" />
+
+                <Button
+                    android:id="@+id/btn_itinerary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Itinerary"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:textAllCaps="false"
+                    android:background="@drawable/tab_pill_selector"
+                    android:textColor="@color/tab_text_selector" />
+            </LinearLayout>
+
+            <!-- dynamic list -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_items"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp" />
+
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

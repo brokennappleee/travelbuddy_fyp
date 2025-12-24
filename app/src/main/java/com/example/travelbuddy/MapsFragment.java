@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -107,7 +109,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         Button btnFriends = view.findViewById(R.id.btn_friends);
         Button btnItinerary = view.findViewById(R.id.btn_itinerary);
 
-        // turn off default background tint that can hide your selector
+        // turn off default background tint that can hide selector
         btnFriends.setBackgroundTintList(null);
         btnItinerary.setBackgroundTintList(null);
 
@@ -131,7 +133,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         rv.addItemDecoration(new DividerItemDecoration(
                 requireContext(), DividerItemDecoration.VERTICAL));
 
-    // temporary hard‑coded data
+        // temporary hard‑coded data
         List<Friend> friends = Arrays.asList(
                 new Friend("Karen Li", "Tuen Mun ZVE", "10:30 pm"),
                 new Friend("Lam", "Ocean Park", "11:00 pm"),
@@ -141,6 +143,29 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         FriendsAdapter friendsAdapter = new FriendsAdapter(friends);
         rv.setAdapter(friendsAdapter);
+
+        // Search Bar Mock up data
+        AutoCompleteTextView etSearch = view.findViewById(R.id.et_search);
+
+        // temporary suggestions; later replace with real data
+        String[] suggestions = new String[] {
+                "Tuen Mun ZVE",
+                "Ocean Park",
+                "Space Museum",
+                "Linda Hotel",
+                "Karen Li",
+                "Miffy Chan"
+        };
+
+        ArrayAdapter<String> searchAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                suggestions
+        );
+
+        etSearch.setAdapter(searchAdapter);
+        etSearch.setThreshold(1); // start suggesting after 1 character typed
+
 
 
     }

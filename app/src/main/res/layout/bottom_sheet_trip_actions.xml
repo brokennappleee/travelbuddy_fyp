@@ -142,7 +142,7 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/icon_calendar" />
+            android:src="@drawable/ic_delete" />
 
         <TextView
             android:layout_width="wrap_content"

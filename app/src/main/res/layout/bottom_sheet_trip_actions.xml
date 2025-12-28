@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="32dp">
+
+    <!-- drag handle -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_margin="12dp">
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:background="@color/lightgrey" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_trip_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Trip Settings"
+        android:fontFamily="@font/montserrat_bold"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:paddingBottom="16dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE" />
+
+    <!-- Each row is its own clickable layout -->
+    <!--Share Row -->
+    <LinearLayout
+        android:id="@+id/row_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="12dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_share" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="14sp"
+            android:paddingStart="16dp"
+            android:text="Share" />
+    </LinearLayout>
+
+    <!--Edit Title-->
+    <LinearLayout
+        android:id="@+id/row_edit_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="12dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_share" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="14sp"
+            android:paddingStart="16dp"
+            android:text="Edit Trip Title" />
+    </LinearLayout>
+
+
+    <!--Edit Date-->
+    <LinearLayout
+        android:id="@+id/row_edit_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="12dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/icon_calendar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="14sp"
+            android:paddingStart="16dp"
+            android:text="Edit Trip Date" />
+    </LinearLayout>
+
+    <!--Privacy-->
+    <LinearLayout
+        android:id="@+id/row_privacy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="12dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/icon_calendar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="14sp"
+            android:paddingStart="16dp"
+            android:text="Privacy" />
+    </LinearLayout>
+
+    <!--Delete this Trip-->
+    <LinearLayout
+        android:id="@+id/row_delete_trip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="12dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/icon_calendar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="14sp"
+            android:paddingStart="16dp"
+            android:text="Delete This Trip" />
+    </LinearLayout>
+
+
+    <!-- Add rows: row_edit_date, row_privacy, row_help, row_delete_trip -->
+
+</LinearLayout>

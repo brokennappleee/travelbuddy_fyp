@@ -66,4 +66,14 @@
     <string name="create_frg_title">Plan a new trip</string>
     <string name="create_frg_subtext">Create a journey to visualize and manage your upcoming adventure</string>
 
+
+    <!--Itinerary Fragment Dropdown List-->
+
+    <string-array name="itinerary_filter_options">
+        <item>All</item>
+        <item>Solo</item>
+        <item>Friends</item>
+    </string-array>
+
+
 </resources>

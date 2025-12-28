@@ -2,63 +2,367 @@ package com.example.travelbuddy;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ItineraryFragment#newInstance} factory method to
+ * Use the  factory method to
  * create an instance of this fragment.
  */
 public class ItineraryFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private final List<Trip> allTrips = new ArrayList<>();
+    @Nullable private String lastOpenedTripId = null;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Trip recentTrip;
+    private final List<Trip> yourTrips = new ArrayList<>();
 
-    public ItineraryFragment() {
-        // Required empty public constructor
-    }
+    private TripsAdapter tripsAdapter;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ItineraryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ItineraryFragment newInstance(String param1, String param2) {
-        ItineraryFragment fragment = new ItineraryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public ItineraryFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_itinerary, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        loadMockTrips();
+        splitTrips();
+
+        CardView cardRecent = view.findViewById(R.id.card_recent_trip);
+        ImageView imgRecent = view.findViewById(R.id.iv_trip_cover);
+        TextView tvRecentTitle = view.findViewById(R.id.tv_trip_title);
+        TextView tvRecentDate = view.findViewById(R.id.tv_trip_date);
+        ImageButton btnToggle = view.findViewById(R.id.btn_toggle_recent);
+        RecyclerView rvYourTrips = view.findViewById(R.id.rv_your_trips);
+
+        // recent card data
+        if (recentTrip == null) {
+            cardRecent.setVisibility(View.GONE);
+        } else {
+            cardRecent.setVisibility(View.VISIBLE);
+            imgRecent.setImageResource(recentTrip.coverResId);
+            tvRecentTitle.setText(recentTrip.title);
+            tvRecentDate.setText(recentTrip.dateRange);
+        }
+
+        // recent card three-dots
+        View recentCardContent = cardRecent.findViewById(R.id.trip_card_root);
+        View btnMoreRecent = recentCardContent.findViewById(R.id.btn_more);
+        btnMoreRecent.setOnClickListener(v -> {
+            if (recentTrip != null) {
+                showTripSettingsSheet(recentTrip);
+            }
+        });
+
+        // RecyclerView
+        rvYourTrips.setLayoutManager(new LinearLayoutManager(getContext()));
+        tripsAdapter = new TripsAdapter(yourTrips,
+                new TripsAdapter.OnTripClickListener() {
+                    @Override
+                    public void onTripClick(Trip trip) {
+                        lastOpenedTripId = trip.id;
+                        // TODO open details
+                    }
+
+                    @Override
+                    public void onTripMoreClick(Trip trip, View anchor) {
+                        showTripSettingsSheet(trip);
+                    }
+                });
+        rvYourTrips.setAdapter(tripsAdapter);
+
+        // toggle recent card
+        final boolean[] isRecentVisible = { true };
+        btnToggle.setOnClickListener(v -> {
+            isRecentVisible[0] = !isRecentVisible[0];
+            cardRecent.setVisibility(isRecentVisible[0] ? View.VISIBLE : View.GONE);
+            btnToggle.setImageResource(
+                    isRecentVisible[0] ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right
+            );
+        });
+    }
+
+    // ---------- data helpers ----------
+
+    private void loadMockTrips() {
+        allTrips.clear();
+        allTrips.add(new Trip("1", "Paris with the city Girls", "Paris",
+                "Oct 20 – 27, 2023", R.drawable.swissalps));
+        allTrips.add(new Trip("2", "Swiss Alps Adventure", "Swiss Alps",
+                "Jul 1 – 8, 2024", R.drawable.swissalps));
+        allTrips.add(new Trip("3", "Fucking Roman LETS GO", "Rome",
+                "Dec 15 – 19, 2024", R.drawable.swissalps));
+        allTrips.add(new Trip("4", "New York Baby", "New York",
+                "Jul 1 – 8, 2024", R.drawable.swissalps));
+    }
+
+    private void splitTrips() {
+        if (lastOpenedTripId != null) {
+            for (Trip t : allTrips) {
+                if (t.id.equals(lastOpenedTripId)) {
+                    recentTrip = t;
+                    break;
+                }
+            }
+        }
+        if (recentTrip == null && !allTrips.isEmpty()) {
+            recentTrip = allTrips.get(allTrips.size() - 1);
+        }
+
+        yourTrips.clear();
+        for (Trip t : allTrips) {
+            if (recentTrip == null || !t.id.equals(recentTrip.id)) {
+                yourTrips.add(t);
+            }
+        }
+    }
+
+    // ---------- bottom sheet & delete ----------
+
+    private void showTripSettingsSheet(Trip trip) {
+        BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
+        View sheetView = getLayoutInflater()
+                .inflate(R.layout.bottom_sheet_trip_actions, null);
+        dialog.setContentView(sheetView);
+
+        View rowShare      = sheetView.findViewById(R.id.row_share);
+        View rowEditTitle  = sheetView.findViewById(R.id.row_edit_title);
+        View rowEditDate   = sheetView.findViewById(R.id.row_edit_date);
+        View rowPrivacy    = sheetView.findViewById(R.id.row_privacy);
+        View rowDeleteTrip = sheetView.findViewById(R.id.row_delete_trip);
+
+        rowShare.setOnClickListener(v -> {
+            // TODO
+            dialog.dismiss();
+        });
+
+        rowEditTitle.setOnClickListener(v -> {
+            // TODO
+            dialog.dismiss();
+        });
+
+        rowEditDate.setOnClickListener(v -> {
+            // TODO
+            dialog.dismiss();
+        });
+
+        rowPrivacy.setOnClickListener(v -> {
+            // TODO
+            dialog.dismiss();
+        });
+
+        rowDeleteTrip.setOnClickListener(v -> {
+            dialog.dismiss();
+            showDeleteConfirmDialog(trip);
+        });
+
+        dialog.show();
+    }
+
+    public class ItineraryFragment extends Fragment {
+
+        private final List<Trip> allTrips = new ArrayList<>();
+        @Nullable private String lastOpenedTripId = null;
+
+        private Trip recentTrip;
+        private final List<Trip> yourTrips = new ArrayList<>();
+
+        private TripsAdapter tripsAdapter;
+
+        public ItineraryFragment() {}
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_itinerary, container, false);
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+
+            loadMockTrips();
+            splitTrips();
+
+            CardView cardRecent = view.findViewById(R.id.card_recent_trip);
+            ImageView imgRecent = view.findViewById(R.id.iv_trip_cover);
+            TextView tvRecentTitle = view.findViewById(R.id.tv_trip_title);
+            TextView tvRecentDate = view.findViewById(R.id.tv_trip_date);
+            ImageButton btnToggle = view.findViewById(R.id.btn_toggle_recent);
+            RecyclerView rvYourTrips = view.findViewById(R.id.rv_your_trips);
+
+            // recent card data
+            if (recentTrip == null) {
+                cardRecent.setVisibility(View.GONE);
+            } else {
+                cardRecent.setVisibility(View.VISIBLE);
+                imgRecent.setImageResource(recentTrip.coverResId);
+                tvRecentTitle.setText(recentTrip.title);
+                tvRecentDate.setText(recentTrip.dateRange);
+            }
+
+            // recent card three-dots
+            View recentCardContent = cardRecent.findViewById(R.id.trip_card_root);
+            View btnMoreRecent = recentCardContent.findViewById(R.id.btn_more);
+            btnMoreRecent.setOnClickListener(v -> {
+                if (recentTrip != null) {
+                    showTripSettingsSheet(recentTrip);
+                }
+            });
+
+            // RecyclerView
+            rvYourTrips.setLayoutManager(new LinearLayoutManager(getContext()));
+            tripsAdapter = new TripsAdapter(yourTrips,
+                    new TripsAdapter.OnTripClickListener() {
+                        @Override
+                        public void onTripClick(Trip trip) {
+                            lastOpenedTripId = trip.id;
+                            // TODO open details
+                        }
+
+                        @Override
+                        public void onTripMoreClick(Trip trip, View anchor) {
+                            showTripSettingsSheet(trip);
+                        }
+                    });
+            rvYourTrips.setAdapter(tripsAdapter);
+
+            // toggle recent card
+            final boolean[] isRecentVisible = { true };
+            btnToggle.setOnClickListener(v -> {
+                isRecentVisible[0] = !isRecentVisible[0];
+                cardRecent.setVisibility(isRecentVisible[0] ? View.VISIBLE : View.GONE);
+                btnToggle.setImageResource(
+                        isRecentVisible[0] ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right
+                );
+            });
+        }
+
+        // ---------- data helpers ----------
+
+        private void loadMockTrips() {
+            allTrips.clear();
+            allTrips.add(new Trip("1", "Paris with the city Girls", "Paris",
+                    "Oct 20 – 27, 2023", R.drawable.swissalps));
+            allTrips.add(new Trip("2", "Swiss Alps Adventure", "Swiss Alps",
+                    "Jul 1 – 8, 2024", R.drawable.swissalps));
+            allTrips.add(new Trip("3", "Fucking Roman LETS GO", "Rome",
+                    "Dec 15 – 19, 2024", R.drawable.swissalps));
+            allTrips.add(new Trip("4", "New York Baby", "New York",
+                    "Jul 1 – 8, 2024", R.drawable.swissalps));
+        }
+
+        private void splitTrips() {
+            if (lastOpenedTripId != null) {
+                for (Trip t : allTrips) {
+                    if (t.id.equals(lastOpenedTripId)) {
+                        recentTrip = t;
+                        break;
+                    }
+                }
+            }
+            if (recentTrip == null && !allTrips.isEmpty()) {
+                recentTrip = allTrips.get(allTrips.size() - 1);
+            }
+
+            yourTrips.clear();
+            for (Trip t : allTrips) {
+                if (recentTrip == null || !t.id.equals(recentTrip.id)) {
+                    yourTrips.add(t);
+                }
+            }
+        }
+
+        // ---------- bottom sheet & delete ----------
+
+        private void showTripSettingsSheet(Trip trip) {
+            BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
+            View sheetView = getLayoutInflater()
+                    .inflate(R.layout.bottom_sheet_trip_actions, null);
+            dialog.setContentView(sheetView);
+
+            View rowShare      = sheetView.findViewById(R.id.row_share);
+            View rowEditTitle  = sheetView.findViewById(R.id.row_edit_title);
+            View rowEditDate   = sheetView.findViewById(R.id.row_edit_date);
+            View rowPrivacy    = sheetView.findViewById(R.id.row_privacy);
+            View rowDeleteTrip = sheetView.findViewById(R.id.row_delete_trip);
+
+            rowShare.setOnClickListener(v -> {
+                // TODO
+                dialog.dismiss();
+            });
+
+            rowEditTitle.setOnClickListener(v -> {
+                // TODO
+                dialog.dismiss();
+            });
+
+            rowEditDate.setOnClickListener(v -> {
+                // TODO
+                dialog.dismiss();
+            });
+
+            rowPrivacy.setOnClickListener(v -> {
+                // TODO
+                dialog.dismiss();
+            });
+
+            rowDeleteTrip.setOnClickListener(v -> {
+                dialog.dismiss();
+                showDeleteConfirmDialog(trip);
+            });
+
+            dialog.show();
+        }
+
+        private void showDeleteConfirmDialog(Trip trip) {
+            new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                    .setTitle("Delete \"" + trip.title + "\"")
+                    .setMessage("Are you sure you want to delete this trip?")
+                    .setPositiveButton("Yes, delete it", (dialog, which) -> deleteTrip(trip))
+                    .setNegativeButton("No, don't delete", null)
+                    .show();
+
+
+        }
+
+        private void deleteTrip(Trip trip) {
+            allTrips.remove(trip);
+            splitTrips();
+            tripsAdapter.notifyDataSetChanged();
+            // Optionally also refresh the recent card UI here.
+        }
+    }
+
+    private void deleteTrip(Trip trip) {
+        allTrips.remove(trip);
+        splitTrips();
+        tripsAdapter.notifyDataSetChanged();
+        // Optionally also refresh the recent card UI here.
     }
 }

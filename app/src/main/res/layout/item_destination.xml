@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <!-- Left: city + country -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tokyo"
+            android:textSize="18sp"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Japan"
+            android:textSize="14sp"
+            android:fontFamily="@font/montserrat_medium"
+            android:textColor="@color/lightgrey" />
+    </LinearLayout>
+
+
+    <!--TODO: Fix layout for flag placeholder -->
+    <!-- Right: flag placeholder -->
+    <ImageView
+        android:id="@+id/img_flag"
+        android:layout_width="42dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"/>
+         />
+</LinearLayout>

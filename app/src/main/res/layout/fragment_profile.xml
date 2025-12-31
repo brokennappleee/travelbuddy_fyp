@@ -1,14 +1,112 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:fillViewport="true">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <!-- Header (avatar + name) -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:background="@color/skyblue">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_avatar"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/profile_placeholder"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/img_avatar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:text="User Name"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:fontFamily="@font/montserrat_bold"/>
+        </RelativeLayout>
+
+
+        <!-- White card with options (no logout here) -->
+        <!-- White card with options -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profile_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="-32dp"
+            app:cardCornerRadius="16dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="6dp">
+
+            <LinearLayout
+                android:id="@+id/profile_options_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:id="@+id/row_edit_profile"
+                    style="@style/ProfileRowStyle"
+                    android:text="Edit Profile"/>
+
+                <TextView
+                    android:id="@+id/row_change_password"
+                    style="@style/ProfileRowStyle"
+                    android:text="Change Password"/>
+
+                <TextView
+                    android:id="@+id/row_change_email"
+                    style="@style/ProfileRowStyle"
+                    android:text="Change Email"/>
+
+                <TextView
+                    android:id="@+id/row_settings"
+                    style="@style/ProfileRowStyle"
+                    android:text="Settings"/>
+
+                <TextView
+                    android:id="@+id/row_help_support"
+                    style="@style/ProfileRowStyle"
+                    android:text="Help and Support"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+
+        <!-- Separate logout section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="24dp">
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textAllCaps="false"
+                style="@style/PrimaryButton"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

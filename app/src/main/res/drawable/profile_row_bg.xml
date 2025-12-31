@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Row background color (white, or transparent if card already white) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent"/>
+        </shape>
+    </item>
+
+    <!-- Bottom divider line -->
+    <item android:gravity="bottom">
+        <shape android:shape="rectangle">
+            <size android:height="1dp"/>
+            <solid android:color="#E0E0E0"/> <!-- light grey -->
+        </shape>
+    </item>
+
+</layer-list>

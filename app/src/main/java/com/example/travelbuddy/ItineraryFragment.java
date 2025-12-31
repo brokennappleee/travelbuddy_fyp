@@ -82,12 +82,23 @@ public class ItineraryFragment extends Fragment {
 
         // RecyclerView
         rvYourTrips.setLayoutManager(new LinearLayoutManager(getContext()));
+
         tripsAdapter = new TripsAdapter(yourTrips,
                 new TripsAdapter.OnTripClickListener() {
                     @Override
                     public void onTripClick(Trip trip) {
                         lastOpenedTripId = trip.id;
-                        // TODO open details
+
+                        TripDetailsFragment detail = TripDetailsFragment.newInstance(
+                                trip.title,
+                                trip.dateRange
+                        );
+
+                        requireActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.home_fragment_container, detail)
+                                .addToBackStack(null)
+                                .commit();
                     }
 
                     @Override
@@ -95,7 +106,9 @@ public class ItineraryFragment extends Fragment {
                         showTripSettingsSheet(trip);
                     }
                 });
+
         rvYourTrips.setAdapter(tripsAdapter);
+
 
         // toggle recent card
         final boolean[] isRecentVisible = { true };

@@ -5,6 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     app:cardCornerRadius="6dp"
+    android:clickable="true"
+    android:focusable="true"
     app:cardUseCompatPadding="true"
     app:cardElevation="1dp">
 

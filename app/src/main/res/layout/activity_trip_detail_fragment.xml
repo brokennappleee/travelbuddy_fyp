@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="24dp">
+
+        <!-- Header: title + dates + avatars -->
+        <LinearLayout
+            android:id="@+id/header_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Trip title + avatars + menu -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <!-- clickable trip name -->
+                    <TextView
+                        android:id="@+id/tv_trip_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Trip to Paris With MY Lovely Girls"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:textSize="22sp"/>
+
+                    <!-- clickable date range -->
+                    <TextView
+                        android:id="@+id/tv_trip_dates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:includeFontPadding="false"
+                        android:drawableStart="@drawable/icon_calendar"
+                        android:drawablePadding="8dp"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Oct 20 - 27, 2025"
+                        android:textSize="16sp"
+                        android:textColor="#777777"/>
+
+                </LinearLayout>
+
+                <!-- Avatars + more button -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/img_friend_1"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_delete"
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/ic_delete"
+                        android:padding="1dp"/>
+
+                    <ImageView
+                        android:id="@+id/img_friend_2"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="-8dp"
+                        android:src="@drawable/ic_delete"
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/ic_delete"
+                        android:padding="1dp"/>
+
+                    <ImageButton
+                        android:id="@+id/btn_trip_menu"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_more_horizontal"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--Just a line divider-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0"
+            android:layout_marginTop="24dp"/>
+
+        <!--Top Nav Bar-->
+        <LinearLayout
+            android:id="@+id/trip_nav_bar"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:gravity="center_vertical">
+
+            <!-- Trip -->
+            <LinearLayout
+                android:id="@+id/tab_trip"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_trip" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="Trip"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Flight (selected state: tint + textColor different) -->
+            <LinearLayout
+                android:id="@+id/tab_flight"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_flight" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Flight"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Accommodation -->
+            <LinearLayout
+                android:id="@+id/tab_lodging"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_lodging" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Lodging"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textSize="12sp" />
+            </LinearLayout>
+            <!-- Rental Cars -->
+            <LinearLayout
+                android:id="@+id/tab_rental"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_details" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Details"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Others -->
+            <LinearLayout
+                android:id="@+id/tab_others"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_more_horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Others"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- bottom line divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0" />
+
+        <!-- Fragment container: only this part changes -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/content_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

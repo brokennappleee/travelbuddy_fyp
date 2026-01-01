@@ -16,19 +16,13 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.travelbuddy.ui.TripDetails.TripDetailFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the  factory method to
- * create an instance of this fragment.
- */
 public class ItineraryFragment extends Fragment {
 
     private final List<Trip> allTrips = new ArrayList<>();
@@ -83,17 +77,21 @@ public class ItineraryFragment extends Fragment {
         // RecyclerView
         rvYourTrips.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // THIS is the navigation block – keep it here
         tripsAdapter = new TripsAdapter(yourTrips,
                 new TripsAdapter.OnTripClickListener() {
                     @Override
                     public void onTripClick(Trip trip) {
+                        // remember last opened
                         lastOpenedTripId = trip.id;
 
-                        TripDetailsFragment detail = TripDetailsFragment.newInstance(
+                        // create TripDetailsFragment and pass basic data
+                        TripDetailFragment detail = TripDetailFragment.newInstance(
                                 trip.title,
                                 trip.dateRange
                         );
 
+                        // swap ItineraryFragment -> TripDetailsFragment
                         requireActivity().getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.home_fragment_container, detail)
@@ -108,7 +106,6 @@ public class ItineraryFragment extends Fragment {
                 });
 
         rvYourTrips.setAdapter(tripsAdapter);
-
 
         // toggle recent card
         final boolean[] isRecentVisible = { true };
@@ -217,11 +214,9 @@ public class ItineraryFragment extends Fragment {
         dialog.show();
     }
 
-
     private void deleteTrip(Trip trip) {
         allTrips.remove(trip);
         splitTrips();
         tripsAdapter.notifyDataSetChanged();
-        // Optionally also refresh the recent card UI here.
     }
 }

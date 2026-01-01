@@ -1,4 +1,4 @@
-package com.example.travelbuddy.ui.destinationsearch;
+package com.example.travelbuddy.ui.DestinationSearch;
 
 import android.view.LayoutInflater;
 import android.view.View;

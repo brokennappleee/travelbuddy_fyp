@@ -7,4 +7,8 @@
     <color name="skyblue">#3FBDE0</color>
     <color name="superlightblue">#C6EBF6</color>
     <color name="red">#DE353E</color>
+
+    <color name="tab_active">#3FBDE0</color>
+    <color name="tab_inactive">#323842</color>
+
 </resources>

@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,12 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripViewHolder> {
+public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripVH> {
 
-    // Fragment implements this to handle clicks
     public interface OnTripClickListener {
-        void onTripClick(Trip trip);                  // card tap
-        void onTripMoreClick(Trip trip, View anchor); // three dots tap
+        void onTripClick(Trip trip);
+        void onTripMoreClick(Trip trip, View anchor);
     }
 
     private final List<Trip> trips;
@@ -30,16 +28,20 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripViewHold
 
     @NonNull
     @Override
-    public TripViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_trip, parent, false); // item_trip uses view_trip_card.xml
-        return new TripViewHolder(view);
+    public TripVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.view_trip_card, parent, false);
+        return new TripVH(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TripViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TripVH holder, int position) {
         Trip trip = trips.get(position);
-        holder.bind(trip, listener);
+        holder.title.setText(trip.title);       // or trip.getName() if you made a getter
+        holder.dates.setText(trip.dateRange);   // use the field you already have
+
+        holder.root.setOnClickListener(v -> listener.onTripClick(trip));
+        holder.btnMore.setOnClickListener(v -> listener.onTripMoreClick(trip, holder.btnMore));
     }
 
     @Override
@@ -47,35 +49,17 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.TripViewHold
         return trips.size();
     }
 
-    static class TripViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView ivCover;
-        TextView tvTitle;
-        TextView tvDate;
+    static class TripVH extends RecyclerView.ViewHolder {
+        View root;
+        TextView title, dates;
         ImageButton btnMore;
 
-        TripViewHolder(@NonNull View itemView) {
+        TripVH(@NonNull View itemView) {
             super(itemView);
-            ivCover = itemView.findViewById(R.id.iv_trip_cover);
-            tvTitle = itemView.findViewById(R.id.tv_trip_title);
-            tvDate = itemView.findViewById(R.id.tv_trip_date);
+            root = itemView.findViewById(R.id.trip_card_root);
+            title = itemView.findViewById(R.id.tv_trip_title);
+            dates = itemView.findViewById(R.id.tv_trip_date);
             btnMore = itemView.findViewById(R.id.btn_more);
-        }
-
-        void bind(final Trip trip, final OnTripClickListener listener) {
-            ivCover.setImageResource(trip.coverResId);
-            tvTitle.setText(trip.title);
-            tvDate.setText(trip.dateRange);
-
-            // Whole card click
-            itemView.setOnClickListener(v -> {
-                if (listener != null) listener.onTripClick(trip);
-            });
-
-            // Three-dots click
-            btnMore.setOnClickListener(v -> {
-                if (listener != null) listener.onTripMoreClick(trip, btnMore);
-            });
         }
     }
 }

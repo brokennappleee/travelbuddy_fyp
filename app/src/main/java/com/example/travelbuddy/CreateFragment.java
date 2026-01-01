@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.travelbuddy.ui.destinationsearch.DestinationSearchFragment;
+import com.example.travelbuddy.ui.DestinationSearch.DestinationSearchFragment;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.text.SimpleDateFormat;

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,12 +44,31 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         // Required empty constructor
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_maps, container, false);
+
+        ImageButton alertsButton = view.findViewById(R.id.btn_alerts);
+        alertsButton.setOnClickListener(v -> openInbox());
+
+        return view;
+    }
+
+
+    private void openInbox() {
+        if (getActivity() == null) return;
+
+        getActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.home_fragment_container, new InboxFragment())
+                .addToBackStack("Inbox")
+                .commit();
     }
 
     @Override

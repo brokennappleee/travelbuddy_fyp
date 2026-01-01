@@ -1,4 +1,4 @@
-package com.example.travelbuddy;
+package com.example.travelbuddy.Maps;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.travelbuddy.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,18 +25,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
 
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.DividerItemDecoration;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap googleMap;
     private BottomSheetBehavior<MaterialCardView> bottomSheetBehavior;
+
+    // list + adapters
+    private RecyclerView rvItems;
+    private FriendsAdapter friendsAdapter;
+    private ItineraryDaysAdapter itineraryAdapter;
 
     public MapsFragment() {
         // Required empty constructor
@@ -43,7 +48,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        // fragment_maps = CoordinatorLayout with map_container + info_sheet
         return inflater.inflate(R.layout.fragment_maps, container, false);
     }
 
@@ -52,7 +56,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // ----- MAP SETUP (your existing code) -----
+        // ----- MAP SETUP -----
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager()
                         .findFragmentById(R.id.map_container);
@@ -67,87 +71,80 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         mapFragment.getMapAsync(this);
 
-        // ----- BOTTOM SHEET SETUP (added) -----
+        // ----- BOTTOM SHEET -----
         MaterialCardView sheet = view.findViewById(R.id.info_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(sheet);
 
-        // allow 3 states: collapsed -> half -> expanded
         bottomSheetBehavior.setFitToContents(false);
-        bottomSheetBehavior.setHalfExpandedRatio(0.28f);  // your “1/3” state
+        bottomSheetBehavior.setHalfExpandedRatio(0.28f);
 
         int peek = getResources().getDimensionPixelSize(R.dimen.bottom_sheet_peek);
-        bottomSheetBehavior.setPeekHeight(peek);          // edge height when collapsed
+        bottomSheetBehavior.setPeekHeight(peek);
 
-        // set max expanded height to about 70% of screen
         sheet.post(() -> {
             int parentHeight = ((View) sheet.getParent()).getHeight();
-            int expandedOffset = (int) (parentHeight * 0.30f);  // top is 30% from top -> 70% sheet [web:22][web:25]
+            int expandedOffset = (int) (parentHeight * 0.30f);
             bottomSheetBehavior.setExpandedOffset(expandedOffset);
         });
 
-        // start with only the edge visible (state 3)
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
-
-        // optional: listen for state changes / sliding
+        // optional listener (you can leave empty)
         bottomSheetBehavior.addBottomSheetCallback(
                 new BottomSheetBehavior.BottomSheetCallback() {
                     @Override
-                    public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                        // handle EXPANDED, HALF_EXPANDED, COLLAPSED if you want
-                    }
+                    public void onStateChanged(@NonNull View bottomSheet, int newState) { }
 
                     @Override
-                    public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                        // slideOffset from -1 to 1
-                    }
+                    public void onSlide(@NonNull View bottomSheet, float slideOffset) { }
                 }
         );
 
-
-        // TAB
+        // ----- TABS -----
         Button btnFriends = view.findViewById(R.id.btn_friends);
         Button btnItinerary = view.findViewById(R.id.btn_itinerary);
 
-        // turn off default background tint that can hide selector
         btnFriends.setBackgroundTintList(null);
         btnItinerary.setBackgroundTintList(null);
 
-        View.OnClickListener tabClick = v -> {
-            boolean friends = v.getId() == R.id.btn_friends;
-            btnFriends.setSelected(friends);
-            btnItinerary.setSelected(!friends);
-
-            // later: swap RecyclerView adapter here
-        };
-
-        btnFriends.setOnClickListener(tabClick);
-        btnItinerary.setOnClickListener(tabClick);
-
-        // default: Friends selected
-        btnFriends.setSelected(true);
-        btnItinerary.setSelected(false);
-
-        RecyclerView rv = view.findViewById(R.id.rv_items);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        rv.addItemDecoration(new DividerItemDecoration(
+        // ----- RECYCLER VIEW + ADAPTERS -----
+        rvItems = view.findViewById(R.id.rv_items);
+        rvItems.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvItems.addItemDecoration(new DividerItemDecoration(
                 requireContext(), DividerItemDecoration.VERTICAL));
 
-        // temporary hard‑coded data
+        // friends dummy data
         List<Friend> friends = Arrays.asList(
                 new Friend("Karen Li", "Tuen Mun ZVE", "10:30 pm"),
                 new Friend("Lam", "Ocean Park", "11:00 pm"),
                 new Friend("Miffy Chan", "Space Museum", "11:00 pm"),
                 new Friend("Hello Kitty", "Linda Hotel", "11:00 pm")
         );
+        friendsAdapter = new FriendsAdapter(friends);
 
-        FriendsAdapter friendsAdapter = new FriendsAdapter(friends);
-        rv.setAdapter(friendsAdapter);
+        // itinerary dummy data
+        itineraryAdapter = new ItineraryDaysAdapter(buildDummyItineraryDays());
 
-        // Search Bar Mock up data
+        // default tab = Friends
+        rvItems.setAdapter(friendsAdapter);
+        btnFriends.setSelected(true);
+        btnItinerary.setSelected(false);
+
+        btnFriends.setOnClickListener(v -> {
+            btnFriends.setSelected(true);
+            btnItinerary.setSelected(false);
+            rvItems.setAdapter(friendsAdapter);
+        });
+
+        btnItinerary.setOnClickListener(v -> {
+            btnFriends.setSelected(false);
+            btnItinerary.setSelected(true);
+            rvItems.setAdapter(itineraryAdapter);
+        });
+
+        // ----- SEARCH BAR MOCK DATA -----
         AutoCompleteTextView etSearch = view.findViewById(R.id.et_search);
 
-        // temporary suggestions; later replace with real data
         String[] suggestions = new String[] {
                 "Tuen Mun ZVE",
                 "Ocean Park",
@@ -164,38 +161,48 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         );
 
         etSearch.setAdapter(searchAdapter);
-        etSearch.setThreshold(1); // start suggesting after 1 character typed
-
-
-
+        etSearch.setThreshold(1);
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap map) {
         googleMap = map;
-
         LatLng tokyo = new LatLng(35.6895, 139.6917);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tokyo, 10f));
     }
 
-    // helper methods if you want to trigger states manually
+    // ----- optional helpers for sheet -----
 
     private void expandFull() {
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);      // full screen
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
     private void expandOneThird() {
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED); // 1/3 screen
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
     }
 
     private void showEdgeOnly() {
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);     // only edge
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
-    //Displaying Friends
+    // ---------- dummy itinerary days ----------
+
+    private List<ItineraryDayItem> buildDummyItineraryDays() {
+        List<ItineraryDayItem> list = new ArrayList<>();
+        list.add(new ItineraryDayItem("Day 1 - 15 Oct 2026", "10 total destinations"));
+        list.add(new ItineraryDayItem("Day 2 - 16 Oct 2026", "6 total destinations"));
+        list.add(new ItineraryDayItem("Day 3 - 17 Oct 2026", "8 total destinations"));
+        list.add(new ItineraryDayItem("Day 4 - 18 Oct 2026", "11 total destinations"));
+        list.add(new ItineraryDayItem("Day 5 - 19 Oct 2026", "7 total destinations"));
+        list.add(new ItineraryDayItem("Day 6 - 20 Oct 2026", "3 total destinations"));
+        return list;
+    }
+
+    // ---------- Friends list classes ----------
+
     static class Friend {
         String name, location, since;
-        Friend(String n, String l, String s) { name=n; location=l; since=s; }
+        Friend(String n, String l, String s) { name = n; location = l; since = s; }
     }
 
     static class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.VH> {
@@ -213,7 +220,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             }
         }
 
-        @NonNull @Override
+        @NonNull
+        @Override
         public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_friend, parent, false);
@@ -232,5 +240,4 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         @Override
         public int getItemCount() { return data.size(); }
     }
-
 }

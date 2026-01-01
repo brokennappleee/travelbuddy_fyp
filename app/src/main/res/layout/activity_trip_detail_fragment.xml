@@ -34,14 +34,33 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <!-- clickable trip name -->
-                    <TextView
-                        android:id="@+id/tv_trip_title"
+                    <!-- title display + edit field stacked -->
+                    <FrameLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Trip to Paris With MY Lovely Girls"
-                        android:fontFamily="@font/montserrat_bold"
-                        android:textSize="22sp"/>
+                        android:layout_height="wrap_content">
+
+                        <!-- normal, clickable title -->
+                        <TextView
+                            android:id="@+id/tv_trip_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Trip to Paris With MY Lovely Girls"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:textSize="22sp"/>
+
+                        <!-- edit mode (initially hidden) -->
+                        <EditText
+                            android:id="@+id/et_trip_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:imeOptions="actionDone"
+                            android:textSize="22sp"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:textColor="@color/darkblack"
+                            android:background="@android:color/transparent"
+                            android:visibility="gone"/>
+                    </FrameLayout>
 
                     <!-- clickable date range -->
                     <TextView

@@ -3,6 +3,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.travelbuddy.R;
+import com.example.travelbuddy.ui.DestinationSearch.DestinationSearchFragment;
 
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class TripFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_trip, container, false);
 
+        // 1) setup RecyclerView
         rvDays = view.findViewById(R.id.rv_days);
         rvDays.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -39,10 +42,26 @@ public class TripFragment extends Fragment {
         DaysAdapter adapter = new DaysAdapter(days);
         rvDays.setAdapter(adapter);
 
+        // 2) setup search bar click
+        LinearLayout searchContainer = view.findViewById(R.id.search_container);
+        searchContainer.setOnClickListener(v -> openDestinationSearch());
+
         return view;
     }
 
-    // TODO: Replace Dummy Days with real dta from DB or API
+    // 3) navigate to destination/options fragment
+    private void openDestinationSearch() {
+        Fragment searchFragment = new DestinationSearchFragment(); // make sure this class exists
+
+        // TripFragment is inside TripDetailFragment, so use parentFragmentManager
+        getParentFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_container, searchFragment) // same container as TripFragment
+                .addToBackStack(null)
+                .commit();
+    }
+
+    // TODO: Replace Dummy Days with real data from DB or API
     private List<DayItem> buildDummyDays() {
         List<DayItem> list = new ArrayList<>();
         list.add(new DayItem("Day 1 • Mon, Oct 20", "0 items"));

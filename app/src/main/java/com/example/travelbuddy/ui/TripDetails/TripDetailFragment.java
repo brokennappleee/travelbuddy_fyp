@@ -1,9 +1,13 @@
 package com.example.travelbuddy.ui.TripDetails;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,10 +21,24 @@ import com.example.travelbuddy.ui.ItinerarySectionFragments.TripFragment;
 
 public class TripDetailFragment extends Fragment {
 
+    // ------- data -------
+    private String tripId;
     private String title;
     private String dateRange;
 
-    // nav views
+    // callback to list screen
+    public interface OnTripTitleChangedListener {
+        void onTripTitleChanged(String tripId, String newTitle);
+    }
+
+    private OnTripTitleChangedListener titleChangedListener;
+
+    // ------- header views -------
+    private TextView tvTitle;
+    private EditText etTitle;
+    private boolean isEditingTitle = false;
+
+    // ------- nav views -------
     private LinearLayout tabTrip, tabFlight, tabLodging, tabRental, tabOthers;
     private ImageView iconTrip, iconFlight, iconLodging, iconRental, iconOthers;
     private TextView labelTrip, labelFlight, labelLodging, labelRental, labelOthers;
@@ -30,10 +48,11 @@ public class TripDetailFragment extends Fragment {
 
     private enum Tab { TRIP, FLIGHT, LODGING, RENTAL, OTHERS }
 
-    // Factory method used from ItineraryFragment
-    public static TripDetailFragment newInstance(String title, String dateRange) {
+    // ------- factory method -------
+    public static TripDetailFragment newInstance(String tripId, String title, String dateRange) {
         TripDetailFragment f = new TripDetailFragment();
         Bundle b = new Bundle();
+        b.putString("tripId", tripId);
         b.putString("title", title);
         b.putString("dateRange", dateRange);
         f.setArguments(b);
@@ -44,10 +63,24 @@ public class TripDetailFragment extends Fragment {
         // empty public constructor
     }
 
+    // ------- lifecycle -------
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof OnTripTitleChangedListener) {
+            titleChangedListener = (OnTripTitleChangedListener) context;
+        } else if (getParentFragment() instanceof OnTripTitleChangedListener) {
+            titleChangedListener = (OnTripTitleChangedListener) getParentFragment();
+        }
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            tripId = getArguments().getString("tripId");
             title = getArguments().getString("title");
             dateRange = getArguments().getString("dateRange");
         }
@@ -61,24 +94,42 @@ public class TripDetailFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.activity_trip_detail_fragment, container, false);
 
-        // Header: set trip title and dates
-        TextView tvTitle = view.findViewById(R.id.tv_trip_title);
+        // ------- header: title + dates -------
+        tvTitle = view.findViewById(R.id.tv_trip_title);
+        etTitle = view.findViewById(R.id.et_trip_title);
         TextView tvDates = view.findViewById(R.id.tv_trip_dates);
+
         tvTitle.setText(title);
+        etTitle.setText(title);
         tvDates.setText(dateRange);
 
-        // default inner fragment = Trip
+        // title edit setup
+        tvTitle.setOnClickListener(v -> startEditTitle());
+
+        etTitle.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                finishEditTitle();
+                return true;
+            }
+            return false;
+        });
+
+        etTitle.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus && isEditingTitle) {
+                finishEditTitle();
+            }
+        });
+
+        // ------- default inner fragment = Trip -------
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_container, new TripFragment())
                 .commit();
 
-        // ---------- nav color + click logic ----------
-
+        // ------- nav color + click logic -------
         colorActive = requireContext().getColor(R.color.skyblue);
         colorInactive = requireContext().getColor(R.color.darkblack);
 
-        // find nav views
         tabTrip    = view.findViewById(R.id.tab_trip);
         tabFlight  = view.findViewById(R.id.tab_flight);
         tabLodging = view.findViewById(R.id.tab_lodging);
@@ -100,37 +151,74 @@ public class TripDetailFragment extends Fragment {
         iconOthers  = (ImageView) tabOthers.getChildAt(0);
         labelOthers = (TextView)  tabOthers.getChildAt(1);
 
-        // default tab highlight
         switchTab(Tab.TRIP);
 
-        // click listeners
         tabTrip.setOnClickListener(v -> switchTab(Tab.TRIP));
         tabFlight.setOnClickListener(v -> switchTab(Tab.FLIGHT));
         tabLodging.setOnClickListener(v -> switchTab(Tab.LODGING));
         tabRental.setOnClickListener(v -> switchTab(Tab.RENTAL));
         tabOthers.setOnClickListener(v -> switchTab(Tab.OTHERS));
 
-        // this must be the LAST line
         return view;
     }
 
+    // ------- title helpers -------
 
+    private void startEditTitle() {
+        isEditingTitle = true;
+        tvTitle.setVisibility(View.GONE);
+        etTitle.setVisibility(View.VISIBLE);
+        etTitle.requestFocus();
+        etTitle.setSelection(etTitle.getText().length());
+
+        InputMethodManager imm =
+                (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(etTitle, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
+
+    private void finishEditTitle() {
+        isEditingTitle = false;
+        String newTitle = etTitle.getText().toString().trim();
+        if (!newTitle.isEmpty()) {
+            title = newTitle;
+            tvTitle.setText(newTitle);
+
+            // IMPORTANT: notify ItineraryFragment
+            if (titleChangedListener != null) {
+                titleChangedListener.onTripTitleChanged(tripId, newTitle);
+            }
+        }
+
+        etTitle.setVisibility(View.GONE);
+        tvTitle.setVisibility(View.VISIBLE);
+
+        InputMethodManager imm =
+                (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(etTitle.getWindowToken(), 0);
+        }
+    }
+
+
+    // ------- nav helpers -------
 
     private void switchTab(Tab tab) {
         Fragment content;
 
         switch (tab) {
             case FLIGHT:
-                content = new FlightFragment();   // TODO: create these fragments
+                content = new FlightFragment();   // TODO
                 break;
             case LODGING:
-                content = new LodgingFragment();
+                content = new LodgingFragment();  // TODO
                 break;
             case RENTAL:
-                content = new DetailsFragment();  // you named this "Details" in XML
+                content = new DetailsFragment();  // TODO
                 break;
             case OTHERS:
-                content = new OthersFragment();
+                content = new OthersFragment();   // TODO
                 break;
             case TRIP:
             default:
@@ -138,13 +226,11 @@ public class TripDetailFragment extends Fragment {
                 break;
         }
 
-        // swap inner fragment
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_container, content)
                 .commit();
 
-        // update nav colors
         setAllInactive();
         switch (tab) {
             case TRIP:

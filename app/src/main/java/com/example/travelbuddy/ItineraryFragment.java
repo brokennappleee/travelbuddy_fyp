@@ -23,7 +23,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItineraryFragment extends Fragment {
+public class ItineraryFragment extends Fragment
+        implements TripDetailFragment.OnTripTitleChangedListener {
 
     private final List<Trip> allTrips = new ArrayList<>();
     @Nullable private String lastOpenedTripId = null;
@@ -45,7 +46,11 @@ public class ItineraryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        loadMockTrips();
+        // 1) only create mock data once
+        if (allTrips.isEmpty()) {
+            loadMockTrips();
+        }
+        // 2) ALWAYS recompute recentTrip + yourTrips from allTrips
         splitTrips();
 
         CardView cardRecent = view.findViewById(R.id.card_recent_trip);
@@ -77,7 +82,6 @@ public class ItineraryFragment extends Fragment {
         // RecyclerView
         rvYourTrips.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // THIS is the navigation block – keep it here
         tripsAdapter = new TripsAdapter(yourTrips,
                 new TripsAdapter.OnTripClickListener() {
                     @Override
@@ -85,13 +89,13 @@ public class ItineraryFragment extends Fragment {
                         // remember last opened
                         lastOpenedTripId = trip.id;
 
-                        // create TripDetailsFragment and pass basic data
+                        // create TripDetailFragment and pass id + data
                         TripDetailFragment detail = TripDetailFragment.newInstance(
+                                trip.id,
                                 trip.title,
                                 trip.dateRange
                         );
 
-                        // swap ItineraryFragment -> TripDetailsFragment
                         requireActivity().getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.home_fragment_container, detail)
@@ -118,6 +122,34 @@ public class ItineraryFragment extends Fragment {
         });
     }
 
+    // ---------- TripDetailFragment.OnTripTitleChangedListener ----------
+
+    @Override
+    public void onTripTitleChanged(String tripId, String newTitle) {
+        // update in allTrips
+        Trip trip = findTripById(tripId);
+        if (trip != null) {
+            trip.title = newTitle;
+        }
+
+        // re-split into recent + yourTrips using updated allTrips
+        splitTrips();
+
+        // refresh whole list (simple for now)
+        if (tripsAdapter != null) {
+            tripsAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private Trip findTripById(String tripId) {
+        for (Trip t : allTrips) {
+            if (t.id.equals(tripId)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
     // ---------- data helpers ----------
 
     private void loadMockTrips() {
@@ -133,6 +165,8 @@ public class ItineraryFragment extends Fragment {
     }
 
     private void splitTrips() {
+        // recentTrip: last opened if exists, otherwise last in list
+        recentTrip = null;
         if (lastOpenedTripId != null) {
             for (Trip t : allTrips) {
                 if (t.id.equals(lastOpenedTripId)) {
@@ -145,6 +179,7 @@ public class ItineraryFragment extends Fragment {
             recentTrip = allTrips.get(allTrips.size() - 1);
         }
 
+        // yourTrips: everything except recentTrip
         yourTrips.clear();
         for (Trip t : allTrips) {
             if (recentTrip == null || !t.id.equals(recentTrip.id)) {
@@ -152,6 +187,7 @@ public class ItineraryFragment extends Fragment {
             }
         }
     }
+
 
     // ---------- bottom sheet & delete ----------
 

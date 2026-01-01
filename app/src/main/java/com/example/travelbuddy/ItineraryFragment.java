@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.travelbuddy.ui.TripDetails.TripDetailFragment;
+import com.example.travelbuddy.Itinerary.TripDetailFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;

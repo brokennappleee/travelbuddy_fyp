@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -83,6 +84,13 @@ public class InboxFragment extends Fragment {
             return insets;
         });
 
+        ImageButton backBtn = view.findViewById(R.id.btn_back_inbox);
+        backBtn.setOnClickListener(v1 -> {
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
         // RecyclerView
         rvInbox = view.findViewById(R.id.rv_inbox);
         rvInbox.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -129,6 +137,9 @@ public class InboxFragment extends Fragment {
         });
 
         return view;
+
+
+
     }
 
     // Moves the underline + changes colors

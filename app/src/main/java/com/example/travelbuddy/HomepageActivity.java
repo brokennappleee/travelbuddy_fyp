@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.travelbuddy.Maps.MapsFragment;
+import com.example.travelbuddy.Profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 

@@ -1,4 +1,4 @@
-package com.example.travelbuddy.ui.TripDetails;
+package com.example.travelbuddy.Itinerary;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.travelbuddy.R;
@@ -94,6 +96,19 @@ public class TripDetailFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.activity_trip_detail_fragment, container, false);
 
+        // insets padding at the very top
+        View root = view.findViewById(R.id.trip_detail_root);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+            v.setPadding(
+                    v.getPaddingLeft(),
+                    top,
+                    v.getPaddingRight(),
+                    v.getPaddingBottom()
+            );
+            return insets;
+        });
+
         // ------- header: title + dates -------
         tvTitle = view.findViewById(R.id.tv_trip_title);
         etTitle = view.findViewById(R.id.et_trip_title);
@@ -104,9 +119,9 @@ public class TripDetailFragment extends Fragment {
         tvDates.setText(dateRange);
 
         // title edit setup
-        tvTitle.setOnClickListener(v -> startEditTitle());
+        tvTitle.setOnClickListener(v1 -> startEditTitle());
 
-        etTitle.setOnEditorActionListener((v, actionId, event) -> {
+        etTitle.setOnEditorActionListener((v12, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 finishEditTitle();
                 return true;
@@ -114,7 +129,7 @@ public class TripDetailFragment extends Fragment {
             return false;
         });
 
-        etTitle.setOnFocusChangeListener((v, hasFocus) -> {
+        etTitle.setOnFocusChangeListener((v13, hasFocus) -> {
             if (!hasFocus && isEditingTitle) {
                 finishEditTitle();
             }
@@ -153,11 +168,18 @@ public class TripDetailFragment extends Fragment {
 
         switchTab(Tab.TRIP);
 
-        tabTrip.setOnClickListener(v -> switchTab(Tab.TRIP));
-        tabFlight.setOnClickListener(v -> switchTab(Tab.FLIGHT));
-        tabLodging.setOnClickListener(v -> switchTab(Tab.LODGING));
-        tabRental.setOnClickListener(v -> switchTab(Tab.RENTAL));
-        tabOthers.setOnClickListener(v -> switchTab(Tab.OTHERS));
+        tabTrip.setOnClickListener(v1 -> switchTab(Tab.TRIP));
+        tabFlight.setOnClickListener(v -> {
+            switchTab(Tab.FLIGHT);
+
+            // TODO: later: only show if no flights in DB
+            FlightEmptySheetFragment sheet = new FlightEmptySheetFragment();
+            sheet.show(getChildFragmentManager(), "FlightEmptySheet");
+        });
+
+        tabLodging.setOnClickListener(v1 -> switchTab(Tab.LODGING));
+        tabRental.setOnClickListener(v1 -> switchTab(Tab.RENTAL));
+        tabOthers.setOnClickListener(v1 -> switchTab(Tab.OTHERS));
 
         return view;
     }

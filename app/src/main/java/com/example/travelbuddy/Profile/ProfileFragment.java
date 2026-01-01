@@ -1,4 +1,4 @@
-package com.example.travelbuddy;
+package com.example.travelbuddy.Profile;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -13,6 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.travelbuddy.MainActivity;
+import com.example.travelbuddy.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,11 +54,35 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+
+
+    // GIVES FRAGMENT PADDING
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        View root = view.findViewById(R.id.profile_root);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+            v.setPadding(
+                    v.getPaddingLeft(),
+                    top,
+                    v.getPaddingRight(),
+                    v.getPaddingBottom()
+            );
+            return insets;
+        });
+
+        return view;
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

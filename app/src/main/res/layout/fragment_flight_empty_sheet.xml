@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@android:color/white">
+
+    <!-- STATE A: Add a Flight -->
+    <LinearLayout
+        android:id="@+id/layout_add_flight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- drag handle -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_margin="12dp">
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="4dp"
+                android:background="@color/lightgrey" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_add_flight_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add a Flight"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/montserrat_bold"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:id="@+id/tv_add_flight_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Import your flight reservation details to your plan by forwarding the related flight email."
+            android:textSize="14sp"
+            android:fontFamily="@font/montserrat_medium"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Forward email button -->
+        <Button
+            android:id="@+id/btn_forward_email"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Forward Email"
+            android:textAllCaps="false"
+            style="@style/PrimaryButton" />
+
+        <!-- Divider + 'or' -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#33000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  or  "
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#33000000" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_manual_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Search by airline and add flight reservation details manually."
+            android:textSize="14sp"
+            android:fontFamily="@font/montserrat_medium"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Search field mock -->
+        <EditText
+            android:id="@+id/et_search_airline"
+            android:drawableStart="@drawable/icon_search4"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:drawablePadding="8dp"
+            android:hint="Search by airline"
+            android:paddingHorizontal="12dp"
+            android:background="@drawable/custom_input"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <!-- STATE B: Airline search + list -->
+    <LinearLayout
+        android:id="@+id/layout_search_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!-- you can keep the same drag handle style if you like -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_margin="12dp">
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="4dp"
+                android:background="@color/lightgrey" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_search_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add a Flight"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/montserrat_bold"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:id="@+id/tv_airline_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Airline"
+            android:textSize="14sp"
+            android:fontFamily="@font/montserrat_medium"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Search box for list -->
+        <EditText
+            android:id="@+id/et_search_airline_list"
+            android:drawableStart="@drawable/icon_search4"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:drawablePadding="8dp"
+            android:hint="Search by airline"
+            android:paddingHorizontal="12dp"
+            android:background="@drawable/custom_input"
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_airlines"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

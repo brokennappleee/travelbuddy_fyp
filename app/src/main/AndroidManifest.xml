@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelBuddy">
         <activity
-            android:name=".ui.TripDetails.TripDetailFragment"
+            android:name=".Itinerary.TripDetailFragment"
             android:exported="false" />
         <!-- Google Maps API key -->
         <!-- add API key below -->
